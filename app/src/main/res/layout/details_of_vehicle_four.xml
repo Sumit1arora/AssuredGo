@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".four_wheeler">
+
+
+    <ImageView
+        android:id="@+id/Rect2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/rect2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </ImageView>
+
+    <ImageView
+        android:id="@+id/Rect3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/rect"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </ImageView>
+
+    <ImageView
+        android:id="@+id/Logo3"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/logo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </ImageView>
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/rect_down_dark"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:src="@drawable/rectdown"-->
+    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent">-->
+
+    <!--    </ImageView>-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/rect_down_light"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:src="@drawable/rect_light"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintLeft_toLeftOf="parent"-->
+
+    <!--       >-->
+
+    <!--    </ImageView>-->
+
+    <TextView
+        android:id="@+id/Step1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_marginTop="10dp"
+        android:text="Step 2"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Logo3">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/Choose_your"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Details"
+        android:textSize="35dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Step1">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/Vehicle_Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="of Vehicle"
+        android:textColor="@color/black"
+        android:textSize="35dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Choose_your">
+
+    </TextView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/Four_wheller_details_card"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#4E95F6"
+        android:translationZ="5dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Vehicle_Text">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/Others_vechile_constraint"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="@+id/Gmail_icon"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/Resent_constarint">
+
+            <ImageView
+                android:id="@+id/Other_vehcile_Icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:elevation="500dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/car"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </ImageView>
+
+            <TextView
+                android:id="@+id/Other_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="Four Wheeler Details"
+                android:textAlignment="textStart"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/Other_vehcile_Icon"
+                app:layout_constraintTop_toTopOf="parent"
+
+                >
+
+            </TextView>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+    <EditText
+        android:id="@+id/Vehicle_Number"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        style="@style/White_button"
+        android:hint="Vehicle Number"
+        android:backgroundTint="#F0F6FE"
+        android:textColorHint="@color/black"
+        android:textAlignment="center"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/Four_wheller_details_card"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="15dp"
+        >
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/Engine_Number"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        style="@style/White_button"
+        android:hint="Engine Number"
+        android:backgroundTint="#F0F6FE"
+        android:textColorHint="@color/black"
+        android:textAlignment="center"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/Vehicle_Number"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="15dp"
+        >
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/Chasis_Number"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        style="@style/White_button"
+        android:hint="Chasis Number"
+        android:backgroundTint="#F0F6FE"
+        android:textColorHint="@color/black"
+        android:textAlignment="center"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/Engine_Number"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="15dp"
+        >
+
+    </EditText>
+
+    <Button
+        android:id="@+id/Submit_button"
+        style="@style/Black_customize_button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="40dp"
+        android:text="Submit"
+        android:textSize="17dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Chasis_Number">
+
+    </Button>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

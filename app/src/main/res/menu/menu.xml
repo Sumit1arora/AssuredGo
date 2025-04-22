@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:id="@+id/ghar_home"
+        android:icon="@drawable/homee"
+        android:title="Home"/>
+
+    <item android:id="@+id/Vehicle_icon"
+        android:title="Vehicle_info"
+        android:icon="@drawable/carr"/>
+
+    <item android:id="@+id/Setting_icon"
+        android:title="Setting"
+        android:icon="@drawable/set"/>
+</menu>

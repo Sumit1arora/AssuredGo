@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+
+    <FrameLayout
+        android:id="@+id/Dashboard_Shape"
+        android:layout_width="505dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dashboard_shape"
+        android:translationZ="5dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/Name_constraint"
+            android:layout_width="398dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="99dp"
+                android:layout_height="76dp"
+
+                android:layout_marginStart="28dp"
+                android:src="@drawable/logo"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteY="0dp" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/Dashboard_Profile"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="28dp"
+                android:layout_marginBottom="10dp"
+                android:elevation="500dp"
+                android:src="@drawable/img"
+                app:civ_border_color="#FF000000"
+                app:civ_border_width="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/Map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+    </FrameLayout>
+
+
+</LinearLayout>

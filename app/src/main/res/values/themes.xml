@@ -1,0 +1,76 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.TT" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+
+    </style>
+
+    <style name="Theme.TT" parent="Base.Theme.TT" />
+
+    <style name="Blue_Button" parent="Theme.MaterialComponents.NoActionBar">
+
+        <item name="backgroundTint">#4E95F6</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">15dp</item>
+        <item name="elevation">500dp</item>
+
+    </style>
+
+<!--    <style name="Dashboard_shape" parent="Theme.MaterialComponents.NoActionBar">-->
+
+<!--        <item name="backgroundTint">#4E95F6</item>-->
+<!--&lt;!&ndash;        <item name="cornerSizeBottomRight">50</item>&ndash;&gt;-->
+<!--        <item name="elevation">500dp</item>-->
+
+<!--    </style>-->
+
+    <style name="Blue_Button_Round" parent="Theme.MaterialComponents.NoActionBar">
+
+        <item name="backgroundTint">#4E95F6</item>
+        <item name="cornerRadius">50dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">15dp</item>
+        <item name="elevation">500dp</item>
+
+    </style>
+    <style name="Black_customize_button">
+        <item name="backgroundTint">#1E1E1E</item>
+        <item name="cornerRadius">10dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">15dp</item>
+        <item name="elevation">500dp</item>
+    </style>
+
+    <style name="White_button" parent="Theme.MaterialComponents.NoActionBar">
+
+        <item name="backgroundTint">#F0F6FE</item>
+        <item name="cornerRadius">10dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">15dp</item>
+        <item name="elevation">500dp</item>
+
+    </style>
+
+    <style name="White_button_Round" parent="Theme.MaterialComponents.NoActionBar">
+
+        <item name="backgroundTint">#F0F6FE</item>
+        <item name="cornerRadius">20dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">15dp</item>
+        <item name="elevation">500dp</item>
+
+    </style>
+
+
+
+</resources>

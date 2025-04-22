@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TT</string>
+    <string name="tt">Best Place for today innovation</string>
+    <string name="pp">shaper</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBM1VacWPorbU2MPCThfwFc9xoQJBNaXB4</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

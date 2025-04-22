@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "797867801661",
+    "project_id": "sih2024-60984",
+    "storage_bucket": "sih2024-60984.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:797867801661:android:c88c340f90e5fd19083e54",
+        "android_client_info": {
+          "package_name": "com.example.sih2023"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuBf8t5lkpVswlGtL9gGAmn8WujkRPkLg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
