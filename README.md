@@ -36,6 +36,13 @@
 - Firebase project with necessary services enabled (Realtime Database, Authentication, Cloud Messaging)
 - Google Maps API key
 
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/assuredgo.git
+   cd assuredgo  
+
 
 
 
