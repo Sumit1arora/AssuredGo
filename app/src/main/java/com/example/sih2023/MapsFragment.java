@@ -1,4 +1,3 @@
-// File: MapsFragment.java
 package com.example.sih2023;
 
 import android.Manifest;
@@ -32,6 +31,8 @@ import com.google.firebase.storage.*;
 import de.hdodenhof.circleimageview.CircleImageView;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapsFragment extends Fragment {
     private FusedLocationProviderClient fusedLocationClient;
@@ -41,6 +42,11 @@ public class MapsFragment extends Fragment {
             .getInstance("https://sih2024-ac37a-default-rtdb.firebaseio.com/")
             .getReference();
     FirebaseUser user;
+    private GoogleMap mMap;
+
+    // Store emergency services locations
+    private List<dashboardmain.EmergencyLocation> hospitals = new ArrayList<>();
+    private List<dashboardmain.EmergencyLocation> policeStations = new ArrayList<>();
 
     @Nullable @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -52,6 +58,16 @@ public class MapsFragment extends Fragment {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         loadProfilePic();
+
+        // Check if emergency services data was passed
+        if (getArguments() != null) {
+            if (getArguments().containsKey("hospitals")) {
+                hospitals = (List<dashboardmain.EmergencyLocation>) getArguments().getSerializable("hospitals");
+            }
+            if (getArguments().containsKey("police")) {
+                policeStations = (List<dashboardmain.EmergencyLocation>) getArguments().getSerializable("police");
+            }
+        }
 
         return view;
     }
@@ -112,8 +128,10 @@ public class MapsFragment extends Fragment {
                         currentLng = location.getLongitude();
                         ((SupportMapFragment) getChildFragmentManager()
                                 .findFragmentById(R.id.map))
-                                .getMapAsync(googleMap ->
-                                        drawMarkers(googleMap, location));
+                                .getMapAsync(googleMap -> {
+                                    mMap = googleMap;
+                                    drawMarkers(googleMap, location);
+                                });
                     } else {
                         Toast.makeText(requireContext(),
                                 "Unable to fetch location", Toast.LENGTH_SHORT).show();
@@ -122,7 +140,10 @@ public class MapsFragment extends Fragment {
     }
 
     private void drawMarkers(GoogleMap map, Location loc) {
-        // scale your custom icons
+        // Clear existing markers
+        map.clear();
+
+        // Scale your custom icons
         int h = 150, w = 150;
         Bitmap small = Bitmap.createScaledBitmap(
                 ((BitmapDrawable)getResources()
@@ -134,22 +155,71 @@ public class MapsFragment extends Fragment {
                 ((BitmapDrawable)getResources()
                         .getDrawable(R.drawable.hospitalmap)).getBitmap(), w, h, false);
 
-        LatLng me    = new LatLng(loc.getLatitude(), loc.getLongitude());
-        LatLng pol   = new LatLng(32.896966, 74.735483);
-        LatLng hosp  = new LatLng(32.842005, 74.815920);
-        LatLng hospi  = new LatLng(32.842005, 74.815920);
+        LatLng me = new LatLng(loc.getLatitude(), loc.getLongitude());
 
+        // Add user location marker
         map.addMarker(new MarkerOptions()
                 .position(me).title("My Location")
                 .icon(BitmapDescriptorFactory.fromBitmap(small)));
-        map.addMarker(new MarkerOptions()
-                .position(pol).title("Police Station")
-                .icon(BitmapDescriptorFactory.fromBitmap(police)));
-        map.addMarker(new MarkerOptions()
-                .position(hosp).title("Hospital")
-                .icon(BitmapDescriptorFactory.fromBitmap(hospital)));
 
+        // Add hospital markers from Places API results
+        for (dashboardmain.EmergencyLocation hospitalLoc : hospitals) {
+            LatLng position = new LatLng(hospitalLoc.latitude, hospitalLoc.longitude);
+            map.addMarker(new MarkerOptions()
+                    .position(position)
+                    .title(hospitalLoc.name)
+                    .snippet("Hospital")
+                    .icon(BitmapDescriptorFactory.fromBitmap(hospital)));
+        }
 
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(me, 16f));
+        // Add police station markers from Places API results
+        for (dashboardmain.EmergencyLocation policeLoc : policeStations) {
+            LatLng position = new LatLng(policeLoc.latitude, policeLoc.longitude);
+            map.addMarker(new MarkerOptions()
+                    .position(position)
+                    .title(policeLoc.name)
+                    .snippet("Police Station")
+                    .icon(BitmapDescriptorFactory.fromBitmap(police)));
+        }
+
+        // If no dynamic locations found, fallback to hardcoded ones (for testing)
+        if (hospitals.isEmpty() && policeStations.isEmpty()) {
+            LatLng pol = new LatLng(32.896966, 74.735483);
+            LatLng hosp = new LatLng(32.842005, 74.815920);
+
+            map.addMarker(new MarkerOptions()
+                    .position(pol).title("Police Station")
+                    .icon(BitmapDescriptorFactory.fromBitmap(police)));
+            map.addMarker(new MarkerOptions()
+                    .position(hosp).title("Hospital")
+                    .icon(BitmapDescriptorFactory.fromBitmap(hospital)));
+        }
+
+        // Animate camera to user's location
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(me, 14f));
+    }
+
+    // Method to update emergency services when new data arrives
+    public void updateEmergencyServices(
+            List<dashboardmain.EmergencyLocation> hospitals,
+            List<dashboardmain.EmergencyLocation> policeStations) {
+
+        this.hospitals = hospitals;
+        this.policeStations = policeStations;
+
+        // If map is already initialized, redraw markers
+        if (mMap != null && getActivity() != null) {
+            // Get current location from parent activity
+            double lat = ((dashboardmain) getActivity()).currentLatitude;
+            double lng = ((dashboardmain) getActivity()).currentLongitude;
+
+            // Create dummy location object with current coordinates
+            Location dummyLoc = new Location("");
+            dummyLoc.setLatitude(lat);
+            dummyLoc.setLongitude(lng);
+
+            // Redraw all markers
+            drawMarkers(mMap, dummyLoc);
+        }
     }
 }

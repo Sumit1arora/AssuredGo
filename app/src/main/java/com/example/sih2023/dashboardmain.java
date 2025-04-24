@@ -24,6 +24,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Serializable;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -40,7 +49,11 @@ public class dashboardmain extends AppCompatActivity {
     private static final String TAG = "DashboardMain";
 
     private FusedLocationProviderClient fusedLocationClient;
-    private double currentLatitude = 0.0, currentLongitude = 0.0;
+    public double currentLatitude = 0.0, currentLongitude = 0.0;
+
+    // Store emergency services data
+    private List<EmergencyLocation> hospitals = new ArrayList<>();
+    private List<EmergencyLocation> policeStations = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +69,15 @@ public class dashboardmain extends AppCompatActivity {
             } else if (id == R.id.Setting_icon) {
                 loadfrag(new settingFragment(), false);
             } else {
-                loadfrag(new MapsFragment(), true);
+                // When map is loaded, pass any emergency services data we have
+                MapsFragment mapFragment = new MapsFragment();
+                if (!hospitals.isEmpty() || !policeStations.isEmpty()) {
+                    Bundle args = new Bundle();
+                    args.putSerializable("hospitals", (Serializable) hospitals);
+                    args.putSerializable("police", (Serializable) policeStations);
+                    mapFragment.setArguments(args);
+                }
+                loadfrag(mapFragment, true);
             }
             return true;
         });
@@ -77,7 +98,8 @@ public class dashboardmain extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET},
+                    LOCATION_PERMISSION_CODE);
         } else {
             getLastLocation();
         }
@@ -102,6 +124,9 @@ public class dashboardmain extends AppCompatActivity {
                         currentLatitude = location.getLatitude();
                         currentLongitude = location.getLongitude();
                         Log.d(TAG, "Updated location: " + currentLatitude + ", " + currentLongitude);
+
+                        // Find emergency services once we have location
+                        findNearbyEmergencyServices(currentLatitude, currentLongitude);
                     } else {
                         Log.w(TAG, "Location is null");
                     }
@@ -134,6 +159,9 @@ public class dashboardmain extends AppCompatActivity {
                 if (inz < 5 && !check) {
                     // Force location update
                     getLastLocation();
+
+                    // Refresh emergency services data
+                    findNearbyEmergencyServices(currentLatitude, currentLongitude);
 
                     // Update police metrics
                     databaseReference.child("police/traffic_accidents").setValue("11");
@@ -258,5 +286,103 @@ public class dashboardmain extends AppCompatActivity {
                 Toast.makeText(this, "SMS permission denied", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    // New methods for finding emergency services with Google Places API
+
+    // Helper class to store emergency location info
+    public static class EmergencyLocation implements Serializable {
+        String name;
+        String type; // "hospital" or "police"
+        double latitude;
+        double longitude;
+
+        public EmergencyLocation(String name, double lat, double lng, String type) {
+            this.name = name;
+            this.latitude = lat;
+            this.longitude = lng;
+            this.type = type;
+        }
+    }
+
+    // Method to find nearby emergency services
+    private void findNearbyEmergencyServices(double latitude, double longitude) {
+        // Create a new thread for network operations
+        new Thread(() -> {
+            try {
+                // Find hospitals nearby
+                hospitals = fetchNearbyPlaces(latitude, longitude, "hospital");
+
+                // Find police stations nearby
+                policeStations = fetchNearbyPlaces(latitude, longitude, "police");
+
+                // Update current map fragment if it's active
+                runOnUiThread(() -> {
+                    // Find the current map fragment if it exists
+                    for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+                        if (fragment instanceof MapsFragment) {
+                            // Pass the data to the existing map fragment
+                            ((MapsFragment) fragment).updateEmergencyServices(hospitals, policeStations);
+                            break;
+                        }
+                    }
+                });
+
+            } catch (Exception e) {
+                Log.e(TAG, "Error finding emergency services: " + e.getMessage());
+                runOnUiThread(() -> {
+                    Toast.makeText(dashboardmain.this,
+                            "Error finding emergency services", Toast.LENGTH_SHORT).show();
+                });
+            }
+        }).start();
+    }
+
+    // Method to fetch places of a specific type
+    private List<EmergencyLocation> fetchNearbyPlaces(double latitude, double longitude, String type)
+            throws IOException, JSONException {
+        List<EmergencyLocation> locations = new ArrayList<>();
+
+        // Create URL for Places API
+        String urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" +
+                "?location=" + latitude + "," + longitude +
+                "&radius=10000" + // Search within 5km
+                "&type=" + type +
+                "&key=" + getString(R.string.google_maps_key);
+
+        URL url = new URL(urlString);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+
+        // Read response
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(connection.getInputStream()));
+        StringBuilder response = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            response.append(line);
+        }
+        reader.close();
+
+        // Parse JSON response
+        JSONObject jsonResponse = new JSONObject(response.toString());
+        JSONArray results = jsonResponse.getJSONArray("results");
+
+        // Process each place (limit to 5 of each type to avoid clutter)
+        for (int i = 0; i < Math.min(results.length(), 5); i++) {
+            JSONObject place = results.getJSONObject(i);
+
+            String name = place.getString("name");
+
+            JSONObject geometry = place.getJSONObject("geometry");
+            JSONObject location = geometry.getJSONObject("location");
+            double placeLat = location.getDouble("lat");
+            double placeLng = location.getDouble("lng");
+
+            EmergencyLocation loc = new EmergencyLocation(name, placeLat, placeLng, type);
+            locations.add(loc);
+        }
+
+        return locations;
     }
 }
