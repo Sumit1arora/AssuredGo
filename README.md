@@ -41,14 +41,9 @@
 1. **Clone the repository**
    ```bash
    git clone https://github.com/your-username/assuredgo.git
+2. **Navigate to the Project Directory**
+   ```bash
    cd assuredgo  
-
-
-
-
-
-
-
 # AssuredGO UI
 
 ![Group 3 (1)](https://github.com/user-attachments/assets/ed085d1f-4cc3-4952-9fd6-6cfb990b732e)
